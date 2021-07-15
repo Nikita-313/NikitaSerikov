@@ -1,12 +1,8 @@
 package com.tgbot.TgBot;
 
 
-import com.tgbot.TgBot.Entity.Category;
-import com.tgbot.TgBot.Entity.Product;
-import com.tgbot.TgBot.Entity.Сlient;
-import com.tgbot.TgBot.Repository.CategoryRepo;
-import com.tgbot.TgBot.Repository.ClientRepo;
-import com.tgbot.TgBot.Repository.ProductRepo;
+import com.tgbot.TgBot.Entity.*;
+import com.tgbot.TgBot.Repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +16,10 @@ public class FillingTests {
     private CategoryRepo categoryRepo;
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private OrderRepo orderRepo;
+    @Autowired
+    private OrderProductRepo orderProductRepo;
 
 
     private void saveClient(Long externalId,  String fullName, String phoneNumber,String address){
@@ -46,6 +46,56 @@ public class FillingTests {
         product.setPrice(price);
         product.setCategory(category);
         productRepo.save(product);
+    }
+
+    private ClientOrder saveOrder(Double total, Integer status, Сlient client){
+        ClientOrder order = new ClientOrder();
+        order.setTotal(total);
+        order.setStatus(status);
+        order.setClient(client);
+        orderRepo.save(order);
+        return order;
+    }
+
+    private void saveOrderProduct(Product product, ClientOrder order){
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setProduct(product);
+        orderProduct.setOrder(order);
+        orderProduct.setCountProduct(1);
+        orderProductRepo.save(orderProduct);
+    }
+
+    @Test
+    public void createOrderProducts(){
+        Сlient client1 = clientRepository.findById(1L).orElse(null);
+        Сlient client2 = clientRepository.findById(2L).orElse(null);
+
+        ClientOrder order1 = saveOrder(1100.00,0,client1);
+        ClientOrder order2 = saveOrder(5000.00,0,client1);
+        ClientOrder order3 = saveOrder(1000.00,0,client2);
+
+        Product product1 = productRepo.findById(17L).orElse(null);
+        Product product2 = productRepo.findById(18L).orElse(null);
+        Product product3 = productRepo.findById(19L).orElse(null);
+
+        Product product4 = productRepo.findById(20L).orElse(null);
+        Product product5 = productRepo.findById(21L).orElse(null);
+        Product product6 = productRepo.findById(22L).orElse(null);
+
+        saveOrderProduct(product1,order1);
+        saveOrderProduct(product2,order1);
+        saveOrderProduct(product3,order1);
+
+        saveOrderProduct(product1,order2);
+        saveOrderProduct(product4,order2);
+        saveOrderProduct(product6,order2);
+
+        saveOrderProduct(product5,order3);
+        saveOrderProduct(product4,order3);
+        saveOrderProduct(product1,order3);
+        saveOrderProduct(product2,order3);
+
+
     }
 
 
