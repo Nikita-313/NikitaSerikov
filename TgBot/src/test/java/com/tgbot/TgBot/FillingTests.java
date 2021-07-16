@@ -1,12 +1,8 @@
 package com.tgbot.TgBot;
 
 
-import com.tgbot.TgBot.Entity.Category;
-import com.tgbot.TgBot.Entity.Product;
-import com.tgbot.TgBot.Entity.Сlient;
-import com.tgbot.TgBot.Repository.CategoryRepo;
-import com.tgbot.TgBot.Repository.ClientRepo;
-import com.tgbot.TgBot.Repository.ProductRepo;
+import com.tgbot.TgBot.Entity.*;
+import com.tgbot.TgBot.Repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +16,10 @@ public class FillingTests {
     private CategoryRepo categoryRepo;
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private OrderRepo orderRepo;
+    @Autowired
+    private OrderProductRepo orderProductRepo;
 
 
     private void saveClient(Long externalId,  String fullName, String phoneNumber,String address){
@@ -48,6 +48,22 @@ public class FillingTests {
         productRepo.save(product);
     }
 
+    private ClientOrder saveOrder(Double total, Integer status, Сlient client){
+        ClientOrder order = new ClientOrder();
+        order.setTotal(total);
+        order.setStatus(status);
+        order.setClient(client);
+        orderRepo.save(order);
+        return order;
+    }
+
+    private void saveOrderProduct(Product product, ClientOrder order){
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setProduct(product);
+        orderProduct.setOrder(order);
+        orderProduct.setCountProduct(1);
+        orderProductRepo.save(orderProduct);
+    }
 
     @Test
     public void createTwoClients(){
