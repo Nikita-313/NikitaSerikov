@@ -6,9 +6,8 @@ import com.tgbot.TgBot.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-
+import com.tgbot.TgBot.Services.EntitiesService;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,6 +107,30 @@ public class EntityServiceImpl implements EntitiesService{
     @Override
     public List<Product> getTopPopularProducts(Integer top) {
         return productRepo.getTopPopular().stream().limit(top).collect(Collectors.toList());
+    }
+
+    @Override
+    public Сlient getСlientByExternalId(Long externalId) {
+        Сlient client = new Сlient();
+        client.setExternalId(externalId);
+        return clientRepo.findOne(Example.of(client)).orElse(null);
+    }
+
+    @Override
+    public List<Category> getCategoriesByParentId(Long parentId) {
+        Category category = new Category();
+        category.setParent(parentId);
+        return categoryRepo.findAll(Example.of(category));
+    }
+
+    @Override
+    public List<OrderProduct> getOrderProductSByOrderId(ClientOrder order) {
+        return orderProductRepo.getOrderProductSByOrderId(order);
+    }
+
+    @Override
+    public OrderProduct getOrderProductByOrderIdAndProductId(ClientOrder order, Product product) {
+        return orderProductRepo.getOrderProductByOrderIdAndProductId(order,product);
     }
 
 
