@@ -43,4 +43,8 @@ public class ClientOrder {
     public void setClient(Сlient client) {
         this.client = client;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

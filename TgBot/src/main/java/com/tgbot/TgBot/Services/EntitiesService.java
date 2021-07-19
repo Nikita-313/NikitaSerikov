@@ -1,11 +1,8 @@
 package com.tgbot.TgBot.Services;
 
-import java.util.List;
+import com.tgbot.TgBot.Entity.*;
 
-import com.tgbot.TgBot.Entity.Category;
-import com.tgbot.TgBot.Entity.ClientOrder;
-import com.tgbot.TgBot.Entity.Product;
-import com.tgbot.TgBot.Entity.Сlient;
+import java.util.List;
 
 /**
  * Сервис для работы с сущностями телеграмм-бота
@@ -65,7 +62,7 @@ public interface EntitiesService
  * Возвращает список заказов клиента по его имени
  * @param name имя клиента
  */
-List<ClientOrder> getClientOrdersByName(String name);
+    List<ClientOrder> getClientOrdersByName(String name);
     /**
      * Возвращает список всех товаров купленных когда-либо клиентом
      * @param id идентификатор клиента
@@ -74,7 +71,24 @@ List<ClientOrder> getClientOrdersByName(String name);
     /**
      * Возвращает указанное кол-во самых популярных товаров среди
      клиентов
-     *
+     * @param top кол-во товаров
      */
     List<Product> getTopPopularProducts(Integer top);
+    /**
+     * Возврашает клиента по externalId
+     */
+    Сlient getСlientByExternalId(Long externalId);
+    /**
+     * Возврашает все категории по Id родителя
+     */
+    List<Category> getCategoriesByParentId(Long parentId);
+
+    /**
+     * Возврашает список товаров в заказе
+     */
+    List<OrderProduct> getOrderProductSByOrderId(ClientOrder order);
+
+    OrderProduct getOrderProductByOrderIdAndProductId(ClientOrder order, Product product);
+
+
 }
